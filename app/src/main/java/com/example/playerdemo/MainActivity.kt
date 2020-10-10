@@ -19,9 +19,10 @@ class MainActivity : AppCompatActivity() {
         private const val INTERVAL_UPDATE_UI = 200L
     }
 
-    private val src = "https://vd2.bdstatic.com/mda-kc6rx94n9kbraf7e/sc/mda-kc6rx94n9kbraf7e.mp4?auth_key=1601696881-0-0-8c5fccc5e76b3ecd990ef7b249341a6d&bcevod_channel=searchbox_feed&pd=1&pt=3"
+    private val src =
+        "https://blz-videos.nosdn.127.net/1/World%20of%20Warcraft/Saurfangs_Decision_zhCN.mp4"
     private val callback = Handler.Callback {
-        Log.d(TAG, "what=${it.what}")
+//        Log.d(TAG, "what=${it.what}")
         when (it.what) {
             WHAT_UPDATE_UI -> {
                 val currentPosition = video_player.currentPosition
@@ -32,16 +33,14 @@ class MainActivity : AppCompatActivity() {
                 progress_timeline.progress = currentPosition
 
                 @IntegerRes
-                val playerLevelRes = if (video_player.isPlaying) R.integer.level_media_pause else R.integer.level_media_play
-//                val playerLevel = if (video_player.isPlaying) 10 else 5
-                btn_play.setImageLevel(resources.getInteger(playerLevelRes))
+                val playerLevelRes =
+                    if (video_player.isPlaying) R.integer.level_media_pause else R.integer.level_media_play
+                val playerLevel = resources.getInteger(playerLevelRes)
+                btn_play.setImageLevel(playerLevel)
 
                 uiHandler.sendEmptyMessageDelayed(WHAT_UPDATE_UI, INTERVAL_UPDATE_UI)
                 true
             }
-//            WHAT_CANCEL_UPDATE_UI -> {
-//                true
-//            }
             else -> false
         }
     }
