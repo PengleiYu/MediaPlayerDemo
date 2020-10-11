@@ -6,11 +6,14 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playerdemo.pages.SurfaceActivity
+import com.example.playerdemo.pages.VideoActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     private val itemList = listOf(
         Item("Video", "视频播放页", VideoActivity::class.java)
+        , Item("Surface", "简单的SurfaceDemo", SurfaceActivity::class.java)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             }
     }
 
-    class Item(
+    private class Item(
         val title: String,
         val desc: String,
         val clz: Class<out Activity>

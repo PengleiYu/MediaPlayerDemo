@@ -1,13 +1,14 @@
-package com.example.playerdemo
+package com.example.playerdemo.pages
 
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playerdemo.R
 import kotlinx.android.synthetic.main.video_main.*
+import timber.log.Timber
 
 /**
  * 视频播放页
@@ -86,7 +87,7 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun play() {
-        Log.d(TAG, "play")
+        Timber.tag(TAG).d("play")
         if (!video_player.canPause()) {
             video_player.setVideoURI(Uri.parse(src))
         }
@@ -95,12 +96,12 @@ class VideoActivity : AppCompatActivity() {
     }
 
     private fun pause() {
-        Log.d(TAG, "pause")
+        Timber.tag(TAG).d("pause")
         video_player.pause()
     }
 
     private fun stop() {
-        Log.d(TAG, "stop")
+        Timber.tag(TAG).d("stop")
         video_player.stopPlayback()
         stopUpdateUi()
     }
