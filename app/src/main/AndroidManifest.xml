@@ -26,6 +26,10 @@
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".pages.SurfaceActivity" />
+        <activity
+            android:name=".pages.MediaControllerActivity"
+            android:screenOrientation="landscape"
+            android:theme="@style/AppTheme.FullScreen" />
     </application>
 
 </manifest>

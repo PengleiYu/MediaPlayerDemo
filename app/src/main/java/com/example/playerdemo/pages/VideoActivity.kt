@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.View
 import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playerdemo.Constants
 import com.example.playerdemo.R
 import kotlinx.android.synthetic.main.video_main.*
 import timber.log.Timber
@@ -23,8 +24,7 @@ class VideoActivity : AppCompatActivity() {
         private const val INTERVAL_UPDATE_UI = 200L
     }
 
-    private val src =
-        "https://blz-videos.nosdn.127.net/1/World%20of%20Warcraft/Saurfangs_Decision_zhCN.mp4"
+    private val src = Constants.VIDEO_SRC
     private val callback = Handler.Callback {
 //        Log.d(TAG, "what=${it.what}")
         when (it.what) {
