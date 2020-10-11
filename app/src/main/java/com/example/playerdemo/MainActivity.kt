@@ -122,7 +122,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * todo 有问题，切到后台再切回来从头播放了
+     * todo 有问题，切到后台再切回来从头播放了;
+     * 原因是切到后台surface销毁了(销毁原因待查)，在回调中释放了player，再次重建player后重头播放了
      */
     override fun onPause() {
         super.onPause()
