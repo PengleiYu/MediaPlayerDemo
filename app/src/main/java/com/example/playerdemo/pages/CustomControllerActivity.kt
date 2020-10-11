@@ -16,10 +16,12 @@ import timber.log.Timber
  *
  * 使用[android.widget.VideoView]实现播放，自定义controller
  */
-class VideoActivity : AppCompatActivity() {
+class CustomControllerActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity";
-        private const val SEEK_STEP = 5000
+        private const val SEEK_STEP = 15000
+        private const val SEEK_MAX_LEN = 1000
+
         private const val WHAT_UPDATE_UI = 1
         private const val INTERVAL_UPDATE_UI = 200L
     }
@@ -31,10 +33,12 @@ class VideoActivity : AppCompatActivity() {
             WHAT_UPDATE_UI -> {
                 val currentPosition = video_player.currentPosition
                 val duration = video_player.duration
+                val progress = SEEK_MAX_LEN * currentPosition / duration
                 tv_current_time.text = getFormatTime(currentPosition)
                 tv_total_time.text = getFormatTime(duration)
-                progress_timeline.max = duration
-                progress_timeline.progress = currentPosition
+                progress_timeline.max = SEEK_MAX_LEN
+                progress_timeline.progress = progress
+                progress_timeline.secondaryProgress = video_player.bufferPercentage * 10
 
                 @IntegerRes
                 val playerLevelRes =
@@ -55,7 +59,10 @@ class VideoActivity : AppCompatActivity() {
         val ss = seconds % 60
         val mm = seconds / 60
         val hh = seconds / 3600
-        return String.format("%02d:%02d:%02d", hh, mm, ss)
+        return if (hh > 0)
+            String.format("%02d:%02d:%02d", hh, mm, ss)
+        else
+            String.format("%02d:%02d", mm, ss)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

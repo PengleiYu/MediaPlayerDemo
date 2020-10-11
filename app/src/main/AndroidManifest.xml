@@ -22,7 +22,7 @@
         </activity>
 
         <activity
-            android:name=".pages.VideoActivity"
+            android:name=".pages.CustomControllerActivity"
             android:screenOrientation="landscape"
             android:theme="@style/AppTheme.FullScreen" />
         <activity android:name=".pages.SurfaceActivity" />

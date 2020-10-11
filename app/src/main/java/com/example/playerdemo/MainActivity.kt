@@ -8,7 +8,7 @@ import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playerdemo.pages.MediaControllerActivity
 import com.example.playerdemo.pages.SurfaceActivity
-import com.example.playerdemo.pages.VideoActivity
+import com.example.playerdemo.pages.CustomControllerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         ,
         Item("MediaController", "使用MediaController的VideoView", MediaControllerActivity::class.java)
         ,
-        Item("CustomerController", "自定义MediaController", VideoActivity::class.java)
+        Item("CustomerController", "自定义MediaController", CustomControllerActivity::class.java)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

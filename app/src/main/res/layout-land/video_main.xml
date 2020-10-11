@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".pages.VideoActivity"
+    tools:context=".pages.CustomControllerActivity"
     tools:ignore="MissingDefaultResource">
 
     <VideoView
@@ -23,18 +23,21 @@
 
         <ImageButton
             android:id="@+id/btn_rew"
+            style="@style/PlayerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_rew" />
 
         <ImageButton
             android:id="@+id/btn_play"
+            style="@style/PlayerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/media_play_pause" />
 
         <ImageButton
             android:id="@+id/btn_ff"
+            style="@style/PlayerButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_ff" />
@@ -44,7 +47,6 @@
         android:id="@+id/ll_container_time"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:background="@android:color/darker_gray"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent">
@@ -54,21 +56,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="40dp"
-            android:text="00:00" />
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
 
-        <ProgressBar
+        <SeekBar
             android:id="@+id/progress_timeline"
             style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:padding="0dp" />
 
         <TextView
             android:id="@+id/tv_total_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:minWidth="40dp"
-            android:text="00:00" />
+            android:text="00:00"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
