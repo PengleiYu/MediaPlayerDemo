@@ -6,6 +6,7 @@ import android.net.Uri
 import android.util.AttributeSet
 import android.view.SurfaceHolder
 import android.view.SurfaceView
+import android.view.View
 import android.widget.MediaController
 
 class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
@@ -37,6 +38,23 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
     private var mUri: Uri? = null
     private var mSurfaceHolder: SurfaceHolder? = null
     private var mMediaPlayer: MediaPlayer? = null
+    var mediaController: MediaController? = null
+        set(value) {
+            field?.hide()
+            field = value
+            attachMediaController()
+        }
+
+    private fun attachMediaController() {
+        if (mMediaPlayer != null && mediaController != null) {
+            val controller = mediaController!!
+            val anchorView: View = parent as? View ?: this
+            controller.setAnchorView(anchorView)
+            controller.setMediaPlayer(this)
+            controller.isEnabled = isInPlaybackState()
+            controller.show(0)
+        }
+    }
 
     private var mCurrentState = STATE_IDLE
     private var mTargetState = STATE_IDLE
@@ -155,6 +173,8 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
             mMediaPlayer = mediaPlayer
 
             mCurrentState = STATE_PREPARING
+
+            attachMediaController()
         } catch (e: Exception) {
 
         }
