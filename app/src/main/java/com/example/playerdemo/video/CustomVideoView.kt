@@ -40,6 +40,11 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
 
     private var mCurrentState = STATE_IDLE
     private var mTargetState = STATE_IDLE
+
+    private var mCanPause = false
+    private var mCanSeekBack = false
+    private var mCanSeekForward = false
+
     private var mSeekWhenPrepared = 0
 
     private var mVideoWidth = 0
@@ -78,6 +83,17 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
     }
     private val onPreparedListener = MediaPlayer.OnPreparedListener {
         mCurrentState = STATE_PREPARED
+
+        // TODO: 2020/10/13 从播放器中获取元数据
+        mCanPause = true
+        mCanSeekBack = true
+        mCanSeekForward = true
+
+        val seekToPosition = mSeekWhenPrepared
+        if (seekToPosition > 0) {
+            seekTo(seekToPosition)
+        }
+
         if (mTargetState == STATE_PLAYING) {
             start()
         }
@@ -100,10 +116,19 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
 
 
     private fun release(clearTargetState: Boolean) {
+        val player = mMediaPlayer ?: return
+        player.reset()
+        player.release()
+        mMediaPlayer = null
+        mCurrentState = STATE_IDLE
+        if (clearTargetState) {
+            mTargetState = STATE_IDLE
+        }
     }
 
     fun setVideoUri(uri: Uri) {
         mUri = uri
+        mSeekWhenPrepared = 0
         openVideo()
         requestLayout()
         invalidate()
@@ -136,40 +161,57 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
     }
 
     override fun isPlaying(): Boolean {
-        TODO("Not yet implemented")
+        return isInPlaybackState() && mMediaPlayer!!.isPlaying
     }
 
     override fun canSeekForward(): Boolean {
-        TODO("Not yet implemented")
+        return mCanSeekForward
     }
 
     override fun getDuration(): Int {
-        TODO("Not yet implemented")
+        if (isInPlaybackState()) {
+            return mMediaPlayer!!.duration
+        }
+        return -1
     }
 
     override fun pause() {
-        TODO("Not yet implemented")
+        if (isInPlaybackState()) {
+            if (mMediaPlayer!!.isPlaying) {
+                mMediaPlayer!!.pause()
+                mCurrentState = STATE_PAUSE
+            }
+        }
+        mTargetState = STATE_PAUSE
     }
 
     override fun getBufferPercentage(): Int {
-        TODO("Not yet implemented")
+        return if (mMediaPlayer != null) mCurrentBufferPercentage else 0
     }
 
     override fun seekTo(pos: Int) {
-        TODO("Not yet implemented")
+        if (isInPlaybackState()) {
+            mSeekWhenPrepared = 0
+            mMediaPlayer!!.seekTo(pos)
+        } else {
+            mSeekWhenPrepared = pos
+        }
     }
 
     override fun getCurrentPosition(): Int {
-        TODO("Not yet implemented")
+        if (isInPlaybackState()) {
+            return mMediaPlayer!!.currentPosition
+        }
+        return -1
     }
 
     override fun canSeekBackward(): Boolean {
-        TODO("Not yet implemented")
+        return mCanSeekBack
     }
 
     override fun start() {
         if (isInPlaybackState()) {
-            mMediaPlayer?.start()
+            mMediaPlayer!!.start()
             mCurrentState = STATE_PLAYING
         }
         mTargetState = STATE_PLAYING
@@ -185,7 +227,7 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
     }
 
     override fun canPause(): Boolean {
-        TODO("Not yet implemented")
+        return mCanPause
     }
 
     private fun isInPlaybackState(): Boolean {
