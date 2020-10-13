@@ -4,6 +4,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.widget.SeekBar
 import androidx.annotation.IntegerRes
 import androidx.appcompat.app.AppCompatActivity
 import com.example.playerdemo.Constants
@@ -27,11 +28,13 @@ class CustomControllerActivity : AppCompatActivity() {
     }
 
     private val src = Constants.VIDEO_SRC
+    private var latestPosition = 0
     private val callback = Handler.Callback {
 //        Log.d(TAG, "what=${it.what}")
         when (it.what) {
             WHAT_UPDATE_UI -> {
                 val currentPosition = video_player.currentPosition
+
                 val duration = video_player.duration
                 val progress = SEEK_MAX_LEN * currentPosition / duration
                 tv_current_time.text = getFormatTime(currentPosition)
@@ -72,6 +75,17 @@ class CustomControllerActivity : AppCompatActivity() {
         btn_rew.setOnClickListener(onClickListener)
         btn_play.setOnClickListener(onClickListener)
         btn_ff.setOnClickListener(onClickListener)
+        progress_timeline.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                if (fromUser) {
+                    val targetPosition = video_player.duration * progress / SEEK_MAX_LEN
+                    video_player.seekTo(targetPosition)
+                }
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
 
     private val onClickListener: View.OnClickListener = View.OnClickListener {
@@ -93,10 +107,13 @@ class CustomControllerActivity : AppCompatActivity() {
         }
     }
 
-    private fun play() {
+    private fun play(seekPosition: Int = -1) {
         Timber.tag(TAG).d("play")
         if (!video_player.canPause()) {
             video_player.setVideoURI(Uri.parse(src))
+        }
+        if (seekPosition > 0) {
+            video_player.seekTo(seekPosition)
         }
         video_player.start()
         startUpdateUi()
@@ -132,11 +149,12 @@ class CustomControllerActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         pause()
+        latestPosition = video_player.currentPosition
     }
 
     override fun onResume() {
         super.onResume()
-        play()
+        play(latestPosition)
     }
 
     override fun onDestroy() {
