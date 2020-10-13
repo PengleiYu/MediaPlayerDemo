@@ -6,9 +6,10 @@ import android.os.Bundle
 import android.widget.AdapterView
 import android.widget.SimpleAdapter
 import androidx.appcompat.app.AppCompatActivity
+import com.example.playerdemo.pages.CustomControllerActivity
+import com.example.playerdemo.pages.CustomPlayerActivity
 import com.example.playerdemo.pages.MediaControllerActivity
 import com.example.playerdemo.pages.SurfaceActivity
-import com.example.playerdemo.pages.CustomControllerActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +18,9 @@ class MainActivity : AppCompatActivity() {
         ,
         Item("MediaController", "使用MediaController的VideoView", MediaControllerActivity::class.java)
         ,
-        Item("CustomerController", "自定义MediaController", CustomControllerActivity::class.java)
+        Item("CustomController", "自定义MediaController", CustomControllerActivity::class.java)
+        ,
+        Item("CustomPlayer", "自定义VideoView", CustomPlayerActivity::class.java)
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
