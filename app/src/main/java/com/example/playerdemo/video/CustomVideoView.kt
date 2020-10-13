@@ -1,9 +1,11 @@
 package com.example.playerdemo.video
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.media.MediaPlayer
 import android.net.Uri
 import android.util.AttributeSet
+import android.view.MotionEvent
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import android.view.View
@@ -33,6 +35,9 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
         defStyleRes: Int
     ) : super(context, attrs, defStyleAttr, defStyleRes) {
         holder.addCallback(mSHCallback)
+//        isFocusable = true
+//        isFocusableInTouchMode = true
+//        requestFocus()
     }
 
     private var mUri: Uri? = null
@@ -51,8 +56,8 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
             val anchorView: View = parent as? View ?: this
             controller.setAnchorView(anchorView)
             controller.setMediaPlayer(this)
-            controller.isEnabled = isInPlaybackState()
-            controller.show(0)
+            controller.isEnabled = true
+            controller.show()
         }
     }
 
@@ -255,5 +260,26 @@ class CustomVideoView : SurfaceView, MediaController.MediaPlayerControl {
                 && mCurrentState != STATE_ERROR
                 && mCurrentState != STATE_IDLE
                 && mCurrentState != STATE_PREPARING
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (MotionEvent.ACTION_DOWN == event?.action
+            && isInPlaybackState()
+            && mediaController != null
+        ) {
+            toggleMediaControllerVisibility()
+        }
+        return super.onTouchEvent(event)
+    }
+
+//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+//        toggleMediaControllerVisibility()
+//        return super.onKeyDown(keyCode, event)
+//    }
+
+    private fun toggleMediaControllerVisibility() {
+        val controller = mediaController ?: return
+        if (controller.isShowing) controller.hide() else controller.show()
     }
 }
